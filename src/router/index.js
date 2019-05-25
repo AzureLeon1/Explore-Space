@@ -4,6 +4,7 @@ import cesiumContainer from '@/components/cesiumContainer'
 import Population from '@/components/Population'
 import EmSystem from '@/components/EmSystem'
 import PlanetWithRing from '@/components/PlanetWithRing'
+import University from '@/components/University'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/planetWithRing',
       name: 'PlanetWithRing',
       component: PlanetWithRing
+    },
+    {
+      path: '/university',
+      name: 'University',
+      component: University
     }
   ]
 })

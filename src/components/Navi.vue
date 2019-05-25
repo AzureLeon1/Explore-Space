@@ -78,10 +78,35 @@ export default {
             name: "PlanetWithRing"
           });
           break;
+        case "4":
+          this.$router.push({
+            name: "PlanetWithRing"
+          });
+          break;
+        case "5":
+          this.$router.push({
+            name: "PlanetWithRing"
+          });
+          break;
+        case "6":
+          this.$router.push({
+            name: "PlanetWithRing"
+          });
+          break;
         case "7":
           console.log("test");
           this.$router.push({
             name: "Population"
+          });
+          break;
+        case "8":
+          this.$router.push({
+            name: "University"
+          });
+          break;
+        case "9":
+          this.$router.push({
+            name: "PlanetWithRing"
           });
           break;
       }
