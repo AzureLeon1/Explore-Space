@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import cesiumContainer from '@/components/cesiumContainer'
 import Population from '@/components/Population'
 import EmSystem from '@/components/EmSystem'
+import PlanetWithRing from '@/components/PlanetWithRing'
 
 Vue.use(Router)
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/emSystem',
       name: 'EmSystem',
       component: EmSystem
+    },
+    {
+      path: '/planetWithRing',
+      name: 'PlanetWithRing',
+      component: PlanetWithRing
     }
   ]
 })

@@ -1,147 +1,111 @@
 <template>
-  <div id="emsystem"></div>
+  <div id="planetWithRing"></div>
 </template>
 
 <script>
 export default {
-  name: "EmSystem",
+  name: "PlanetWithRing",
   data() {
     return {};
   },
   methods: {
-    test() {},
     init() {
-      //Camera, scene, and renderer
+      //////////////////////
+      ///  SCENE/CAMERA  ///
+      //////////////////////
+
       var scene = new THREE.Scene();
-      var camera = new THREE.PerspectiveCamera(
-        45,
-        window.innerWidth / window.innerHeight,
-        1,
-        2000
-      );
-      scene.add(camera);
-      camera.position.set(0, 35, 70);
+      var camera = new THREE.PerspectiveCamera( 45, window.innerWidth/window.innerHeight, 0.1, 1000 );
 
-      var renderer = new THREE.WebGLRenderer({ antialias: true });
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      console.log(document.body);
-      console.log(renderer.domElement);
+      var renderer = new THREE.WebGLRenderer({antialias: true});
+      renderer.setSize( window.innerWidth, window.innerHeight );
+      document.body.appendChild( renderer.domElement );
 
-      // document.body.appendChild(renderer.domElement);
-      var g = document.createElement("div");
-      g.setAttribute("id", "emDiv");
-      document.body.appendChild(g);
-      document.getElementById("emDiv").appendChild(renderer.domElement);
-
-      //Orbit Controls
+      camera.position.set(0, 50, 500);
       var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
 
-      //Lights
-      var ambientLight = new THREE.AmbientLight(0xf1f1f1);
-      scene.add(ambientLight);
+      //////////////////////
+      /////  LIGHTS  ///////
+      //////////////////////
 
-      var spotLight = new THREE.DirectionalLight(0xffffff);
-      spotLight.position.set(50, 50, 50);
-      scene.add(spotLight);
+      var light = new THREE.AmbientLight( 0x888888 )
+      scene.add( light )
 
-      //Objects (We build a mesh using a geometry and a material)
+      var light = new THREE.DirectionalLight( 0xfdfcf0, 1 )
+      light.position.set(10,10,10)
+      scene.add( light )
 
-      //Earth
-      var earthGeometry = new THREE.SphereGeometry(10, 50, 50);
+      //////////////////////
+      /////  OBJECTS  //////
+      //////////////////////
+
+      var earthGeometry = new THREE.SphereGeometry(50, 50,50 );
       var earthMaterial = new THREE.MeshPhongMaterial({
-        map: new THREE.ImageUtils.loadTexture(
-          "../../static/images/earth_texture_2.jpg"
-        ),
-        color: 0xf2f2f2,
-        specular: 0xbbbbbb,
-        shininess: 2
+        map: new THREE.ImageUtils.loadTexture("../../static/images/gas_giant.jpg"),
+        specular: 0x000000,
+        shininess: 0
       });
       var earth = new THREE.Mesh(earthGeometry, earthMaterial);
       scene.add(earth);
 
-      //Clouds
-      var cloudGeometry = new THREE.SphereGeometry(10.3, 50, 50);
-      var cloudMaterial = new THREE.MeshPhongMaterial({
-        map: new THREE.ImageUtils.loadTexture(
-          "../../static/images/clouds_2.jpg"
-        ),
-        transparent: true,
-        opacity: 0.1
-      });
-      var clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
-      scene.add(clouds);
+      // var saturnRingGeometry = new THREE.RingGeometry(55, 100, 50, 20, 0, 2 * Math.PI);
+      // var saturnRingMaterial = new THREE.MeshPhongMaterial({
+      //   map: new THREE.ImageUtils.loadTexture("/images/saturnringpattern.gif"),
+      //   specular: new THREE.ImageUtils.loadTexture("/images/saturnringcolor.jpg"),
+      //   side: THREE.DoubleSide
+      // });
+      // var saturnRings = new THREE.Mesh(saturnRingGeometry, saturnRingMaterial);
+      // scene.add(saturnRings);
+      for (var i = 0; i < 100; i++) {
+        var randStart = Math.random() * 50 + 60;
+        var ringGeo = new THREE.RingGeometry(randStart, randStart + .1, 100, 20, 0, 2 * Math.PI);
+        var ringMaterial = new THREE.MeshPhongMaterial({
+          color: 0xffeecc,
+          side: THREE.DoubleSide
+        });
+        var ring = new THREE.Mesh(ringGeo, ringMaterial);
+        ring.rotation.x -= (Math.PI/2);
+        scene.add(ring);
+      }
 
-      //Stars
-      var starGeometry = new THREE.SphereGeometry(1000, 50, 50);
+      var starGeometry = new THREE.SphereGeometry(500, 100, 100);
       var starMaterial = new THREE.MeshPhongMaterial({
-        map: new THREE.ImageUtils.loadTexture(
-          "../../static/images/galaxy_starfield.png"
-        ),
+        map: new THREE.ImageUtils.loadTexture("../../static/images/galaxy_starfield.png"),
         side: THREE.DoubleSide,
         shininess: 0
       });
       var starField = new THREE.Mesh(starGeometry, starMaterial);
       scene.add(starField);
 
-      //Moon
-      var moonGeometry = new THREE.SphereGeometry(3.5, 50, 50);
-      var moonMaterial = new THREE.MeshPhongMaterial({
-        map: THREE.ImageUtils.loadTexture(
-          "../../static/images/moon_texture.jpg"
-        )
-      });
-      var moon = new THREE.Mesh(moonGeometry, moonMaterial);
-      moon.position.set(35, 0, 0);
-      scene.add(moon);
+      ///////////////////////////
+      /// RENDERING/ANIM LOOP ///
+      ///////////////////////////
+      var dx = .062;
+      var dy = -.027;
+      var dz = -.3;
 
-      //Camera vector
-      var earthVec = new THREE.Vector3(0, 0, 0);
+      var saturnVec = new THREE.Vector3(0,0,0);
 
-      var r = 35;
-      var theta = 0;
-      var dTheta = (2 * Math.PI) / 1000;
+      var render = function (actions) {
 
-      var dx = 0.01;
-      var dy = -0.01;
-      var dz = -0.05;
+        earth.rotation.y -= .001;
 
-      //Render loop
-      var render = function() {
-        earth.rotation.y += 0.0009;
-        clouds.rotation.y += 0.00005;
-
-        //Moon orbit
-        theta += dTheta;
-        moon.position.x = r * Math.cos(theta);
-        moon.position.z = r * Math.sin(theta);
-
-        //Flyby
-        if (camera.position.z < 0) {
-          dx *= -1;
-        }
         camera.position.x += dx;
         camera.position.y += dy;
         camera.position.z += dz;
 
-        camera.lookAt(earthVec);
-
-        //Flyby reset
-        if (camera.position.z < -100) {
-          camera.position.set(0, 35, 70);
+        if (camera.position.y < 2) {
+          camera.lookAt(saturnVec);
         }
 
-        camera.lookAt(earthVec);
         renderer.render(scene, camera);
-        requestAnimationFrame(render);
+        requestAnimationFrame( render );
       };
       render();
     }
   },
   mounted() {
     this.init();
-  },
-  beforeDestroy() {
-    document.body.removeChild(document.getElementById("emDiv"));
   }
 };
 </script>

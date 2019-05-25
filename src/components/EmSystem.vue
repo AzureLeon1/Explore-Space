@@ -9,7 +9,6 @@ export default {
     return {};
   },
   methods: {
-    test() {},
     init() {
       //Camera, scene, and renderer
       var scene = new THREE.Scene();

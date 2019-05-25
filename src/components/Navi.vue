@@ -75,7 +75,7 @@ export default {
           break;
         case "3":
           this.$router.push({
-            name: "EmSystem"
+            name: "PlanetWithRing"
           });
           break;
         case "7":
