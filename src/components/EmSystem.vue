@@ -28,8 +28,13 @@ export default {
       renderer.setSize(window.innerWidth, window.innerHeight);
       console.log(document.body);
       console.log(renderer.domElement);
-      document.body.appendChild(renderer.domElement);
-      // document.getElementById(emsystem).appendChild(renderer.domElement);
+
+
+      // document.body.appendChild(renderer.domElement);
+      var g = document.createElement('div');
+g.setAttribute("id", "emDiv");
+document.body.appendChild(g);
+      document.getElementById("emDiv").appendChild(renderer.domElement);
 
       //Orbit Controls
       var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -47,7 +52,7 @@ export default {
       //Earth
       var earthGeometry = new THREE.SphereGeometry(10, 50, 50);
       var earthMaterial = new THREE.MeshPhongMaterial({
-        map: new THREE.ImageUtils.loadTexture("../assets/images/EmSystem"),
+        map: new THREE.ImageUtils.loadTexture("../../static/images/earth_texture_2.jpg"),
         color: 0xf2f2f2,
         specular: 0xbbbbbb,
         shininess: 2
@@ -58,7 +63,7 @@ export default {
       //Clouds
       var cloudGeometry = new THREE.SphereGeometry(10.3, 50, 50);
       var cloudMaterial = new THREE.MeshPhongMaterial({
-        map: new THREE.ImageUtils.loadTexture("../assets/images/clouds_2.jpg"),
+        map: new THREE.ImageUtils.loadTexture("../../static/images/clouds_2.jpg"),
         transparent: true,
         opacity: 0.1
       });
@@ -68,7 +73,7 @@ export default {
       //Stars
       var starGeometry = new THREE.SphereGeometry(1000, 50, 50);
       var starMaterial = new THREE.MeshPhongMaterial({
-        // map: new THREE.ImageUtils.loadTexture("../assets/images/galaxy_starfield.png"),
+        map: new THREE.ImageUtils.loadTexture("../../static/images/galaxy_starfield.png"),
         side: THREE.DoubleSide,
         shininess: 0
       });
@@ -78,7 +83,7 @@ export default {
       //Moon
       var moonGeometry = new THREE.SphereGeometry(3.5, 50, 50);
       var moonMaterial = new THREE.MeshPhongMaterial({
-        map: THREE.ImageUtils.loadTexture("../assets/images/moon_texture.jpg")
+        map: THREE.ImageUtils.loadTexture("../../static/images/moon_texture.jpg")
       });
       var moon = new THREE.Mesh(moonGeometry, moonMaterial);
       moon.position.set(35, 0, 0);
@@ -129,6 +134,9 @@ export default {
   },
   mounted() {
     this.init();
+  },
+  beforeDestroy() {
+    document.body.removeChild( document.getElementById("emDiv") )
   }
 };
 </script>

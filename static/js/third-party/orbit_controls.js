@@ -273,17 +273,17 @@
         // min(camera displacement, camera rotation in radians)^2 > EPS
         // using small-angle approximation cos(x/2) = 1 - x^2 / 8
 
-        if ( zoomChanged ||
-           lastPosition.distanceToSquared( this.object.position ) > EPS ||
-            8 * ( 1 - lastQuaternion.dot( this.object.quaternion ) ) > EPS ) {
+        // if ( zoomChanged ||
+        //    lastPosition.distanceToSquared( this.object.position ) > EPS ||
+        //     8 * ( 1 - lastQuaternion.dot( this.object.quaternion ) ) > EPS ) {
 
-          lastPosition.copy( this.object.position );
-          lastQuaternion.copy( this.object.quaternion );
-          zoomChanged = false;
+        //   lastPosition.copy( this.object.position );
+        //   lastQuaternion.copy( this.object.quaternion );
+        //   zoomChanged = false;
 
-          return true;
+        //   return true;
 
-        }
+        // }
 
         return false;
 
