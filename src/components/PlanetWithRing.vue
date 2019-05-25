@@ -27,7 +27,11 @@ export default {
       console.log(document.body);
       console.log(renderer.domElement);
 
-      document.getElementById("emsystem").appendChild(renderer.domElement);
+      // document.body.appendChild(renderer.domElement);
+      var g = document.createElement("div");
+      g.setAttribute("id", "emDiv");
+      document.body.appendChild(g);
+      document.getElementById("emDiv").appendChild(renderer.domElement);
 
       //Orbit Controls
       var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -135,6 +139,9 @@ export default {
   },
   mounted() {
     this.init();
+  },
+  beforeDestroy() {
+    document.body.removeChild(document.getElementById("emDiv"));
   }
 };
 </script>
