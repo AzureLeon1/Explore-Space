@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import cesiumContainer from '@/components/cesiumContainer'
 import Population from '@/components/Population'
+import EmSystem from '@/components/EmSystem'
 
 Vue.use(Router)
 
@@ -16,6 +17,11 @@ export default new Router({
       path: '/population',
       name: 'Population',
       component: Population
+    },
+    {
+      path: '/emSystem',
+      name: 'EmSystem',
+      component: EmSystem
     }
   ]
 })

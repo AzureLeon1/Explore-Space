@@ -271,6 +271,9 @@ DAT.Globe = function(container, opts) {
     }
 
     THREE.GeometryUtils.merge(subgeo, point);
+    // // 引入新 three.js 时修改此处
+    // point.updateMatrix();
+    // subgeo.merge(point.geometry, point.matrix);
   }
 
   function onMouseDown(event) {

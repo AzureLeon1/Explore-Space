@@ -17,8 +17,6 @@
       <span id="year1995" class="year">1995</span>
       <span id="year2000" class="year">2000</span>
     </div>
-
-
   </div>
 </template>
 
@@ -29,6 +27,11 @@ export default {
     return {};
   },
   methods: {
+    importJS() {
+      const oScript = document.createElement("script");
+      oScript.type = "text/javascript";
+      oScript.src = "./static/js/third-party/three.min.js";
+    },
     init() {
       console.log(Detector.webgl);
       if (!Detector.webgl) {
@@ -99,15 +102,14 @@ export default {
     }
   },
   mounted() {
-    this.init();
+    // this.importJS()
+    this.init()
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
-
 #info {
   font-size: 11px;
   position: fixed;

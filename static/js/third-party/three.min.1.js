@@ -19,53 +19,10 @@ grey:8421504,honeydew:15794160,hotpink:16738740,indianred:13458524,indigo:491533
 lime:65280,limegreen:3329330,linen:16445670,magenta:16711935,maroon:8388608,mediumaquamarine:6737322,mediumblue:205,mediumorchid:12211667,mediumpurple:9662683,mediumseagreen:3978097,mediumslateblue:8087790,mediumspringgreen:64154,mediumturquoise:4772300,mediumvioletred:13047173,midnightblue:1644912,mintcream:16121850,mistyrose:16770273,moccasin:16770229,navajowhite:16768685,navy:128,oldlace:16643558,olive:8421376,olivedrab:7048739,orange:16753920,orangered:16729344,orchid:14315734,palegoldenrod:15657130,
 palegreen:10025880,paleturquoise:11529966,palevioletred:14381203,papayawhip:16773077,peachpuff:16767673,peru:13468991,pink:16761035,plum:14524637,powderblue:11591910,purple:8388736,red:16711680,rosybrown:12357519,royalblue:4286945,saddlebrown:9127187,salmon:16416882,sandybrown:16032864,seagreen:3050327,seashell:16774638,sienna:10506797,silver:12632256,skyblue:8900331,slateblue:6970061,slategray:7372944,slategrey:7372944,snow:16775930,springgreen:65407,steelblue:4620980,tan:13808780,teal:32896,thistle:14204888,
 tomato:16737095,turquoise:4251856,violet:15631086,wheat:16113331,white:16777215,whitesmoke:16119285,yellow:16776960,yellowgreen:10145074};THREE.Quaternion=function(a,b,c,d){this._x=a||0;this._y=b||0;this._z=c||0;this._w=void 0!==d?d:1};
-THREE.MOUSE={LEFT:0,MIDDLE:1,RIGHT:2};
 THREE.Quaternion.prototype={constructor:THREE.Quaternion,_x:0,_y:0,_z:0,_w:0,_euler:void 0,_updateEuler:function(){void 0!==this._euler&&this._euler.setFromQuaternion(this,void 0,!1)},get x(){return this._x},set x(a){this._x=a;this._updateEuler()},get y(){return this._y},set y(a){this._y=a;this._updateEuler()},get z(){return this._z},set z(a){this._z=a;this._updateEuler()},get w(){return this._w},set w(a){this._w=a;this._updateEuler()},set:function(a,b,c,d){this._x=a;this._y=b;this._z=c;this._w=d;
 this._updateEuler();return this},copy:function(a){this._x=a._x;this._y=a._y;this._z=a._z;this._w=a._w;this._updateEuler();return this},setFromEuler:function(a,b){if(!1===a instanceof THREE.Euler)throw Error("ERROR: Quaternion's .setFromEuler() now expects a Euler rotation rather than a Vector3 and order.  Please update your code.");var c=Math.cos(a._x/2),d=Math.cos(a._y/2),e=Math.cos(a._z/2),f=Math.sin(a._x/2),h=Math.sin(a._y/2),g=Math.sin(a._z/2);"XYZ"===a.order?(this._x=f*d*e+c*h*g,this._y=c*h*
 e-f*d*g,this._z=c*d*g+f*h*e,this._w=c*d*e-f*h*g):"YXZ"===a.order?(this._x=f*d*e+c*h*g,this._y=c*h*e-f*d*g,this._z=c*d*g-f*h*e,this._w=c*d*e+f*h*g):"ZXY"===a.order?(this._x=f*d*e-c*h*g,this._y=c*h*e+f*d*g,this._z=c*d*g+f*h*e,this._w=c*d*e-f*h*g):"ZYX"===a.order?(this._x=f*d*e-c*h*g,this._y=c*h*e+f*d*g,this._z=c*d*g-f*h*e,this._w=c*d*e+f*h*g):"YZX"===a.order?(this._x=f*d*e+c*h*g,this._y=c*h*e+f*d*g,this._z=c*d*g-f*h*e,this._w=c*d*e-f*h*g):"XZY"===a.order&&(this._x=f*d*e-c*h*g,this._y=c*h*e-f*d*g,this._z=
-c*d*g+f*h*e,this._w=c*d*e+f*h*g);!1!==b&&this._updateEuler();return this},
-setFromUnitVectors: function ( vFrom, vTo ) {
-
-  // assumes direction vectors vFrom and vTo are normalized
-
-  var EPS = 0.000001;
-
-  var r = vFrom.dot( vTo ) + 1;
-
-  if ( r < EPS ) {
-
-    r = 0;
-
-    if ( Math.abs( vFrom.x ) > Math.abs( vFrom.z ) ) {
-
-      this._x = - vFrom.y;
-      this._y = vFrom.x;
-      this._z = 0;
-      this._w = r;
-
-    } else {
-
-      this._x = 0;
-      this._y = - vFrom.z;
-      this._z = vFrom.y;
-      this._w = r;
-
-    }
-
-  } else {
-
-    // crossVectors( vFrom, vTo ); // inlined to avoid cyclic dependency on Vector3
-
-    this._x = vFrom.y * vTo.z - vFrom.z * vTo.y;
-    this._y = vFrom.z * vTo.x - vFrom.x * vTo.z;
-    this._z = vFrom.x * vTo.y - vFrom.y * vTo.x;
-    this._w = r;
-
-  }
-
-  return this.normalize();
-
-},setFromAxisAngle:function(a,b){var c=b/2,d=Math.sin(c);this._x=a.x*d;this._y=a.y*d;this._z=a.z*d;this._w=Math.cos(c);this._updateEuler();return this},setFromRotationMatrix:function(a){var b=a.elements,c=b[0],a=b[4],d=b[8],e=b[1],f=b[5],h=b[9],g=b[2],i=b[6],b=b[10],k=c+f+b;0<k?(c=0.5/Math.sqrt(k+1),this._w=0.25/c,this._x=(i-h)*c,this._y=(d-g)*c,this._z=(e-a)*c):c>f&&c>b?(c=2*Math.sqrt(1+c-f-b),this._w=(i-h)/c,this._x=0.25*c,
+c*d*g+f*h*e,this._w=c*d*e+f*h*g);!1!==b&&this._updateEuler();return this},setFromAxisAngle:function(a,b){var c=b/2,d=Math.sin(c);this._x=a.x*d;this._y=a.y*d;this._z=a.z*d;this._w=Math.cos(c);this._updateEuler();return this},setFromRotationMatrix:function(a){var b=a.elements,c=b[0],a=b[4],d=b[8],e=b[1],f=b[5],h=b[9],g=b[2],i=b[6],b=b[10],k=c+f+b;0<k?(c=0.5/Math.sqrt(k+1),this._w=0.25/c,this._x=(i-h)*c,this._y=(d-g)*c,this._z=(e-a)*c):c>f&&c>b?(c=2*Math.sqrt(1+c-f-b),this._w=(i-h)/c,this._x=0.25*c,
 this._y=(a+e)/c,this._z=(d+g)/c):f>b?(c=2*Math.sqrt(1+f-c-b),this._w=(d-g)/c,this._x=(a+e)/c,this._y=0.25*c,this._z=(h+i)/c):(c=2*Math.sqrt(1+b-c-f),this._w=(e-a)/c,this._x=(d+g)/c,this._y=(h+i)/c,this._z=0.25*c);this._updateEuler();return this},inverse:function(){this.conjugate().normalize();return this},conjugate:function(){this._x*=-1;this._y*=-1;this._z*=-1;this._updateEuler();return this},lengthSq:function(){return this._x*this._x+this._y*this._y+this._z*this._z+this._w*this._w},length:function(){return Math.sqrt(this._x*
 this._x+this._y*this._y+this._z*this._z+this._w*this._w)},normalize:function(){var a=this.length();0===a?(this._z=this._y=this._x=0,this._w=1):(a=1/a,this._x*=a,this._y*=a,this._z*=a,this._w*=a);return this},multiply:function(a,b){return void 0!==b?(console.warn("DEPRECATED: Quaternion's .multiply() now only accepts one argument. Use .multiplyQuaternions( a, b ) instead."),this.multiplyQuaternions(a,b)):this.multiplyQuaternions(this,a)},multiplyQuaternions:function(a,b){var c=a._x,d=a._y,e=a._z,f=
 a._w,h=b._x,g=b._y,i=b._z,k=b._w;this._x=c*k+f*h+d*i-e*g;this._y=d*k+f*g+e*h-c*i;this._z=e*k+f*i+c*g-d*h;this._w=f*k-c*h-d*g-e*i;this._updateEuler();return this},multiplyVector3:function(a){console.warn("DEPRECATED: Quaternion's .multiplyVector3() has been removed. Use is now vector.applyQuaternion( quaternion ) instead.");return a.applyQuaternion(this)},slerp:function(a,b){var c=this._x,d=this._y,e=this._z,f=this._w,h=f*a._w+c*a._x+d*a._y+e*a._z;0>h?(this._w=-a._w,this._x=-a._x,this._y=-a._y,this._z=
