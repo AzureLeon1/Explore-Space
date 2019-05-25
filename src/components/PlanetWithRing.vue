@@ -19,7 +19,8 @@ export default {
 
       var renderer = new THREE.WebGLRenderer({antialias: true});
       renderer.setSize( window.innerWidth, window.innerHeight );
-      document.body.appendChild( renderer.domElement );
+      // document.body.appendChild( renderer.domElement );
+      document.getElementById("planetWithRing").appendChild(renderer.domElement);
 
       camera.position.set(0, 50, 500);
       var orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
