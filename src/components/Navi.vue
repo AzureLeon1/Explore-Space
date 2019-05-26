@@ -37,7 +37,7 @@
         </span>
         <a-menu-item key="7">Population</a-menu-item>
         <a-menu-item key="8">Top 500 Universities</a-menu-item>
-        <a-menu-item key="9">Import and export</a-menu-item>
+        <a-menu-item key="9">Import and Export</a-menu-item>
       </a-sub-menu>
       <a-menu-item key="about">
         <a-icon type="info-circle"/>
@@ -106,7 +106,7 @@ export default {
           break;
         case "9":
           this.$router.push({
-            name: "PlanetWithRing"
+            name: "ImportExport"
           });
           break;
       }

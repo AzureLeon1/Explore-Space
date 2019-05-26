@@ -5,6 +5,7 @@ import Population from '@/components/Population'
 import EmSystem from '@/components/EmSystem'
 import PlanetWithRing from '@/components/PlanetWithRing'
 import University from '@/components/University'
+import ImportExport from '@/components/ImportExport'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path: '/university',
       name: 'University',
       component: University
+    },
+    {
+      path: '/importExport',
+      name: 'ImportExport',
+      component: ImportExport
     }
   ]
 })
