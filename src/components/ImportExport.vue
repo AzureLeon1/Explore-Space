@@ -56,14 +56,32 @@ export default {
         // use the switchCountry() API to directly change the clicked country without clicked on the surface
 
         controller.switchCountry("CN");
+        $("#countryArea").text("CHINA picked!");
+        $("#infoBoard").fadeIn(1000);
+
+        setTimeout(function() {
+          $("#infoBoard").fadeOut(1000);
+        }, 3000);
       });
 
       $("#russia").click(function() {
         controller.switchCountry("RU");
+        $("#countryArea").text("RUSSIA picked!");
+        $("#infoBoard").fadeIn(1000);
+
+        setTimeout(function() {
+          $("#infoBoard").fadeOut(1000);
+        }, 3000);
       });
 
       $("#america").click(function() {
         controller.switchCountry("US");
+        $("#countryArea").text("AMERICA picked!");
+        $("#infoBoard").fadeIn(1000);
+
+        setTimeout(function() {
+          $("#infoBoard").fadeOut(1000);
+        }, 3000);
       });
     }
   },
