@@ -17,20 +17,17 @@ export default {
       var controller = new GIO.Controller(container);
 
       // 点击国家的回调函数
-      controller.onCountryPicked( callback );
-      function callback ( selectedCountry ) {
+      controller.onCountryPicked(callback);
+      function callback(selectedCountry) {
         console.log("test");
 
-        $( "#countryArea" ).text( selectedCountry.name + " picked!" );
-        $( "#infoBoard" ).fadeIn( 1000 );
+        $("#countryArea").text(selectedCountry.name + " picked!");
+        $("#infoBoard").fadeIn(1000);
 
-        setTimeout( function () {
-
-            $( "#infoBoard" ).fadeOut( 1000 );
-
-        }, 3000 );
-
-    }
+        setTimeout(function() {
+          $("#infoBoard").fadeOut(1000);
+        }, 3000);
+      }
 
       // ask a file for the JSON data, using AJAX to load the data
 
@@ -51,6 +48,23 @@ export default {
           controller.init();
         }
       });
+
+      $("#china").show();
+      $("#russia").show();
+      $("#america").show();
+      $("#china").click(function() {
+        // use the switchCountry() API to directly change the clicked country without clicked on the surface
+
+        controller.switchCountry("CN");
+      });
+
+      $("#russia").click(function() {
+        controller.switchCountry("RU");
+      });
+
+      $("#america").click(function() {
+        controller.switchCountry("US");
+      });
     }
   },
   mounted() {
@@ -58,10 +72,12 @@ export default {
   },
   beforeDestroy() {
     $("#globalArea").empty();
+    $("#china").hide();
+    $("#russia").hide();
+    $("#america").hide();
   }
 };
 </script>
 
 <style>
-
 </style>

@@ -62,14 +62,60 @@ height: 50%;
 
 }
 
+#china, #russia, #america {
+
+position: absolute;
+right: 60px;
+width: 100px;
+height: 40px;
+line-height: 40px;
+text-align: center;
+color: #cbcbcb;
+cursor: pointer;
+user-select: none;
+box-sizing: border-box;
+transition: 1s;
+background-color: rgba(110, 110, 110, 0.8);
+
+}
+
+#china:hover, #russia:hover, #america:hover {
+
+color: #fff;
+background-color: #929292;
+
+}
+
+#china {
+
+top: 100px;
+
+}
+
+#russia {
+
+top: 180px;
+
+}
+
+#america {
+
+top: 260px;
+
+}
+
   </style>
 </head>
 
 <body>
+    <div id="china" style="display : none">China</div>
+    <div id="russia" style="display : none">Russia</div>
+    <div id="america" style="display : none">America</div>
     <div id="globalArea"></div>
     <div id="infoBoard">
         <div id="countryArea"></div>
     </div>
+
   <div id="app"></div>
   <!-- built files will be auto injected -->
 </body>
