@@ -13,6 +13,7 @@
   <script type="text/javascript" src="./static/js/third-party/newthree.min.js"></script>
   <script type="text/javascript" src="./static/js/third-party/gio.min.js"></script>
   <script type="text/javascript" src="./static/js/third-party/jquery.min.js"></script>
+  <script type="text/javascript" src="./static/js/third-party/highcharts.min.js"></script>
   <script type="text/javascript" src="./static/js/globe.js"></script>
   <style>
     html {
@@ -31,90 +32,162 @@
     }
 
     #globalArea {
+      display: none;
+      position: fixed;
+      top: 0;
+      height: 100%;
+      width: 66%;
+      margin: 0;
+      padding: 0;
 
+    }
+
+    #infoBoard {
+
+      position: absolute;
+      left: 20%;
+      top: 40%;
+      width: 400px;
+      height: 60px;
+      line-height: 50px;
+      text-align: center;
+      color: white;
+      font-size: 20px;
+      background-color: rgba(106, 107, 111, 0.6);
+      display: none;
+
+    }
+
+    #countryArea {
+
+      width: 100%;
+      height: 50%;
+
+    }
+
+    #china,
+    #russia,
+    #america {
+
+      position: absolute;
+      top: 50%;
+      width: 100px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      color: #cbcbcb;
+      cursor: pointer;
+      user-select: none;
+      box-sizing: border-box;
+      transition: 1s;
+      background-color: rgba(110, 110, 110, 0.8);
+
+    }
+
+    #china:hover,
+    #russia:hover,
+    #america:hover {
+
+      color: #fff;
+      background-color: #929292;
+
+    }
+
+    #china {
+
+      left: 10%;
+
+    }
+
+    #russia {
+
+      left: 40%;
+
+    }
+
+    #america {
+
+      left: 70%;
+
+    }
+
+    #chooseText {
+      position: absolute;
+      top: 20%;
+      left: 10%;
+      font-size: 18px;
+      font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif;
+    }
+
+    #chooseCountry {
+      display: none;
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 25%;
+      width: 33%;
+      background-color: #000000;
+      border-left: 1px solid #9c9c9c;
+      border-bottom: 1px solid #9c9c9c;
+      box-sizing: border-box;
+    }
+
+    #importChartArea {
+      display: none;
+      position: fixed;
+      right: 0;
+      top: 25%;
+      height: 37.5%;
+      width: 33%;
+      background-color: #000000;
+      border-left: 1px solid #9c9c9c;
+      border-bottom: 1px solid #9c9c9c;
+      box-sizing: border-box;
+
+    }
+
+    #exportChartArea {
+      display: none;
+      position: fixed;
+      right: 0;
+      top: 62.5%;
+      height: 37.5%;
+      width: 33%;
+      background-color: #000000;
+      border-left: 1px solid #9c9c9c;
+      box-sizing: border-box;
+
+    }
+
+    /* #globeArea {
+
+position: fixed;
+left: 50%;
+top: 0;
 height: 100%;
-width: 100%;
-margin: 0;
-padding: 0;
+width: 50%;
+background-color: #000000;
 
-}
-
-#infoBoard {
-
-position: absolute;
-left: 35%;
-top: 40%;
-width: 400px;
-height: 60px;
-line-height: 50px;
-text-align: center;
-color: white;
-font-size: 20px;
-background-color: rgba(106, 107, 111, 0.6);
-display: none;
-
-}
-
-#countryArea {
-
-width: 100%;
-height: 50%;
-
-}
-
-#china, #russia, #america {
-
-position: absolute;
-right: 60px;
-width: 100px;
-height: 40px;
-line-height: 40px;
-text-align: center;
-color: #cbcbcb;
-cursor: pointer;
-user-select: none;
-box-sizing: border-box;
-transition: 1s;
-background-color: rgba(110, 110, 110, 0.8);
-
-}
-
-#china:hover, #russia:hover, #america:hover {
-
-color: #fff;
-background-color: #929292;
-
-}
-
-#china {
-
-top: 100px;
-
-}
-
-#russia {
-
-top: 180px;
-
-}
-
-#america {
-
-top: 260px;
-
-}
+} */
 
   </style>
 </head>
 
 <body>
-    <div id="china" style="display : none">China</div>
-    <div id="russia" style="display : none">Russia</div>
-    <div id="america" style="display : none">America</div>
-    <div id="globalArea"></div>
-    <div id="infoBoard">
-        <div id="countryArea"></div>
-    </div>
+  <div id="chooseCountry">
+    <div id="chooseText">Quickly Choose Country:</div>
+    <div id="china">China</div>
+    <div id="russia">Russia</div>
+    <div id="america">America</div>
+  </div>
+
+  <div id="importChartArea"></div>
+  <div id="exportChartArea"></div>
+
+  <div id="globalArea"></div>
+  <div id="infoBoard">
+    <div id="countryArea"></div>
+  </div>
 
   <div id="app"></div>
   <!-- built files will be auto injected -->

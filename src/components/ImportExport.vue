@@ -8,6 +8,70 @@ export default {
   name: "ImportExport",
   methods: {
     init() {
+      var lookupData = {
+        France: "FR",
+        "United States": "US",
+        China: "CN",
+        Russia: "RU"
+      };
+
+      var importData = [
+        {
+          name: "France",
+          y: 1000000,
+          sliced: false,
+          selected: false
+        },
+        {
+          name: "United States",
+          y: 1100000,
+          sliced: true,
+          selected: true
+        },
+        {
+          name: "China",
+          y: 1000000,
+          sliced: false,
+          selected: false
+        },
+        {
+          name: "Russia",
+          y: 3000000,
+          sliced: false,
+          selected: false
+        }
+      ];
+
+      var exportData = [
+        {
+          name: "France",
+          y: 1000000,
+          sliced: false,
+          selected: false
+        },
+        {
+          name: "United States",
+          y: 1000000,
+          sliced: true,
+          selected: true
+        },
+        {
+          name: "China",
+          y: 3100000,
+          sliced: false,
+          selected: false
+        },
+        {
+          name: "Russia",
+          y: 1000000,
+          sliced: false,
+          selected: false
+        }
+      ];
+
+      var importChart = createImportChart();
+      var exportChart = createExportChart();
+
       // get the container to hold the IO globe
 
       var container = document.getElementById("globalArea");
@@ -17,17 +81,7 @@ export default {
       var controller = new GIO.Controller(container);
 
       // 点击国家的回调函数
-      controller.onCountryPicked(callback);
-      function callback(selectedCountry) {
-        console.log("test");
-
-        $("#countryArea").text(selectedCountry.name + " picked!");
-        $("#infoBoard").fadeIn(1000);
-
-        setTimeout(function() {
-          $("#infoBoard").fadeOut(1000);
-        }, 3000);
-      }
+      controller.onCountryPicked(onCountryClickedCallback);
 
       // ask a file for the JSON data, using AJAX to load the data
 
@@ -49,9 +103,10 @@ export default {
         }
       });
 
-      $("#china").show();
-      $("#russia").show();
-      $("#america").show();
+      $("#globalArea").show();
+      $("#chooseCountry").show();
+      $("#importChartArea").show();
+      $("#exportChartArea").show();
       $("#china").click(function() {
         // use the switchCountry() API to directly change the clicked country without clicked on the surface
 
@@ -62,6 +117,8 @@ export default {
         setTimeout(function() {
           $("#infoBoard").fadeOut(1000);
         }, 3000);
+        updateImportChart("China");
+        updateExportChart("China");
       });
 
       $("#russia").click(function() {
@@ -72,6 +129,8 @@ export default {
         setTimeout(function() {
           $("#infoBoard").fadeOut(1000);
         }, 3000);
+        updateImportChart("Russia");
+        updateExportChart("Russia");
       });
 
       $("#america").click(function() {
@@ -82,7 +141,211 @@ export default {
         setTimeout(function() {
           $("#infoBoard").fadeOut(1000);
         }, 3000);
+        updateImportChart("United States");
+        updateExportChart("United States");
       });
+
+      function createImportChart() {
+        var chart = {
+          plotBackgroundColor: "#000000",
+          plotBorderWidth: 0,
+          plotShadow: false,
+          backgroundColor: "#000000"
+        };
+
+        var title = {
+          text: "Country Import Pie Chart",
+          style: {
+            color: "#ffffff"
+          }
+        };
+
+        var tooltip = {
+          pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
+        };
+
+        var plotOptions = {
+          pie: {
+            allowPointSelect: true,
+            cursor: "pointer",
+            dataLabels: {
+              enabled: true,
+              format: "<b>{point.name}%</b>: {point.percentage:.1f} %",
+              style: {
+                color:
+                  (Highcharts.theme && Highcharts.theme.contrastTextColor) ||
+                  "black"
+              }
+            },
+            events: {
+              click: function(event) {
+                switchClickedCountry(event.point.name);
+                switchClickedCountry(event.point.name);
+                $("#countryArea").text(event.point.name + " picked!");
+                $("#infoBoard").fadeIn(1000);
+
+                setTimeout(function() {
+                  $("#infoBoard").fadeOut(1000);
+                }, 3000);
+                updateExportChart(event.point.name);
+              }
+            }
+          }
+        };
+
+        var series = [
+          {
+            type: "pie",
+            name: "import percentage",
+            slicedOffset: 20,
+            data: importData
+          }
+        ];
+
+        var credits = {
+          enabled: false
+        };
+
+        var json = {};
+        json.chart = chart;
+        json.title = title;
+        json.tooltip = tooltip;
+        json.series = series;
+        json.plotOptions = plotOptions;
+        json.credits = credits;
+
+        return Highcharts.chart("importChartArea", json);
+      }
+
+      function createExportChart() {
+        var chart = {
+          plotBackgroundColor: "#000000",
+          plotBorderWidth: 0,
+          plotShadow: false,
+          backgroundColor: "#000000"
+        };
+
+        var title = {
+          text: "Country Export Pie Chart",
+          style: {
+            color: "#ffffff"
+          }
+        };
+
+        var tooltip = {
+          pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b>"
+        };
+
+        var plotOptions = {
+          pie: {
+            allowPointSelect: true,
+            cursor: "pointer",
+            dataLabels: {
+              enabled: true,
+              format: "<b>{point.name}%</b>: {point.percentage:.1f} %",
+              style: {
+                color:
+                  (Highcharts.theme && Highcharts.theme.contrastTextColor) ||
+                  "black"
+              }
+            },
+            events: {
+              click: function(event) {
+                console.log(event);
+                switchClickedCountry(event.point.name);
+                $("#countryArea").text(event.point.name + " picked!");
+                $("#infoBoard").fadeIn(1000);
+
+                setTimeout(function() {
+                  $("#infoBoard").fadeOut(1000);
+                }, 3000);
+                updateImportChart(event.point.name);
+              }
+            }
+          }
+        };
+
+        var series = [
+          {
+            type: "pie",
+            name: "export percentage",
+            slicedOffset: 20,
+            data: exportData
+          }
+        ];
+
+        var credits = {
+          enabled: false
+        };
+
+        var json = {};
+        json.chart = chart;
+        json.title = title;
+        json.tooltip = tooltip;
+        json.series = series;
+        json.plotOptions = plotOptions;
+        json.credits = credits;
+
+        return Highcharts.chart("exportChartArea", json);
+      }
+
+      function switchClickedCountry(countryName) {
+        var abbr = lookupData[countryName];
+        controller.switchCountry(abbr);
+      }
+
+      function onCountryClickedCallback(clickedCountry) {
+        $("#countryArea").text(clickedCountry.name + " picked!");
+        $("#infoBoard").fadeIn(1000);
+
+        setTimeout(function() {
+          $("#infoBoard").fadeOut(1000);
+        }, 3000);
+
+        for (var countryName in lookupData) {
+          if (lookupData[countryName] === clickedCountry.ISOCode) {
+            console.log(countryName);
+
+            updateImportChart(countryName);
+            updateExportChart(countryName);
+
+            return;
+          }
+        }
+
+        updateImportChart();
+        updateExportChart();
+      }
+
+      function updateImportChart(countryName) {
+        for (var i in importData) {
+          var data = importData[i];
+          if (data.name === countryName) {
+            data.sliced = true;
+            data.selected = true;
+          } else {
+            data.sliced = false;
+            data.selected = false;
+          }
+        }
+
+        importChart.series[0].setData(JSON.parse(JSON.stringify(importData)));
+      }
+
+      function updateExportChart(countryName) {
+        for (var i in exportData) {
+          var data = exportData[i];
+          if (data.name === countryName) {
+            data.sliced = true;
+            data.selected = true;
+          } else {
+            data.sliced = false;
+            data.selected = false;
+          }
+        }
+
+        exportChart.series[0].setData(JSON.parse(JSON.stringify(exportData)));
+      }
     }
   },
   mounted() {
@@ -90,9 +353,10 @@ export default {
   },
   beforeDestroy() {
     $("#globalArea").empty();
-    $("#china").hide();
-    $("#russia").hide();
-    $("#america").hide();
+    $("#globalArea").hide();
+    $("#chooseCountry").hide();
+    $("#importChartArea").hide();
+    $("#exportChartArea").hide();
   }
 };
 </script>
