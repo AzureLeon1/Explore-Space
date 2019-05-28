@@ -6,6 +6,7 @@ import EmSystem from '@/components/EmSystem'
 import PlanetWithRing from '@/components/PlanetWithRing'
 import University from '@/components/University'
 import ImportExport from '@/components/ImportExport'
+import Earth from '@/components/Earth'
 
 Vue.use(Router)
 
@@ -14,7 +15,8 @@ export default new Router({
     {
       path: '/',
       name: 'cesiumContainer',
-      component: cesiumContainer
+      // component: cesiumContainer
+      component: Earth
     },
     {
       path: '/population',
