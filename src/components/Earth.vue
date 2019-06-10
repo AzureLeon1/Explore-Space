@@ -126,6 +126,7 @@ export default {
       const video = document.getElementById("myvideo");
       const canvas = document.getElementById("canvas");
       const context = canvas.getContext("2d");
+      console.log(context);
       let trackButton = document.getElementById("trackbutton");
       let updateNote = document.getElementById("updatenote");
 

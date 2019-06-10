@@ -1,5 +1,16 @@
 <template>
   <div class="home">
+    <div id="updatenote" class="updatenote mt10">loading model ..</div>
+    <button
+      id="trackbutton"
+      class="bx--btn bx--btn--secondary mt10 trackbutton"
+      style="position: fixed; z-index: 5; top: 0; left: 45%"
+      type="button"
+      disabled
+    >Toggle Video Control ..</button>
+    <video class="videobox canvasbox" autoplay="autoplay" id="myvideo" style="display: none"></video>
+    <canvas id="canvas" class="border canvasbox"></canvas>
+
     <div id="container"></div>
 
     <div id="info">
@@ -33,6 +44,12 @@ export default {
       oScript.src = "./static/js/third-party/three.min.js";
     },
     init() {
+      var delta_x = 0;
+      var delta_y = 0;
+      var temp_delta_x = 0;
+      var temp_delta_y = 0;
+      var isMove = false;
+
       console.log(Detector.webgl);
       if (!Detector.webgl) {
         Detector.addGetWebGLMessage();
@@ -99,6 +116,159 @@ export default {
         };
         xhr.send(null);
       }
+
+      console.log("test-113");
+      // TODO: 手部跟踪
+      const video = document.getElementById("myvideo");
+      const canvas = document.getElementById("canvas");
+      const context = canvas.getContext("2d");
+      let trackButton = document.getElementById("trackbutton");
+      let updateNote = document.getElementById("updatenote");
+
+      let imgindex = 1;
+      let isVideo = false;
+      let model = null;
+      let videoInterval = 10;
+
+      let last_x = -1;
+      let last_y = -1;
+
+      let hand_x = 0;
+      let hand_y = 0;
+
+      const modelParams = {
+        flipHorizontal: true, // flip e.g for video
+        maxNumBoxes: 1, // maximum number of boxes to detect
+        iouThreshold: 0.5, // ioU threshold for non-max suppression
+        scoreThreshold: 0.6 // confidence threshold for predictions.
+      };
+
+      function startVideo() {
+        handTrack.startVideo(video).then(function(status) {
+          console.log("video started", status);
+          if (status) {
+            updateNote.innerText = "Now tracking";
+            isVideo = true;
+            runDetection();
+          } else {
+            updateNote.innerText = "Please enable video";
+          }
+        });
+      }
+
+      function toggleVideo() {
+        if (!isVideo) {
+          updateNote.innerText = "Starting video";
+          startVideo();
+        } else {
+          updateNote.innerText = "Stopping video";
+          handTrack.stopVideo(video);
+          isVideo = false;
+          updateNote.innerText = "Video stopped";
+        }
+      }
+
+      trackButton.addEventListener("click", function() {
+        toggleVideo();
+      });
+
+      function runDetection() {
+        model.detect(video).then(predictions => {
+          // console.log("Predictions: ", predictions);
+          // get the middle x value of the bounding box and map to paddle location
+          model.renderPredictions(predictions, canvas, context, video);
+          if (!predictions[0]) {
+            isMove = false;
+            last_x = -1;
+            last_y = -1;
+          }
+          if (predictions[0]) {
+            isMove = true;
+            let midval = predictions[0].bbox[0] + predictions[0].bbox[2] / 2;
+            // console.log(predictions[0].bbox[0],predictions[0].bbox[1],predictions[0].bbox[2], predictions[0].bbox[3]);
+            // gamex = document.body.clientWidth * (midval / video.width)
+            // updatePaddleControl(gamex)
+            // console.log('Predictions: ', gamex);
+            hand_x = predictions[0].bbox[0];
+            hand_y = predictions[0].bbox[1];
+            temp_delta_x = hand_x - last_x;
+            temp_delta_y = hand_y - last_y;
+            delta_x =
+              temp_delta_x /
+              Math.sqrt(Math.pow(temp_delta_x, 2) + Math.pow(temp_delta_y, 2));
+            delta_y =
+              temp_delta_y /
+              Math.sqrt(Math.pow(temp_delta_x, 2) + Math.pow(temp_delta_y, 2));
+            last_x = hand_x;
+            last_y = hand_y;
+          }
+          if (isVideo) {
+            setTimeout(() => {
+              runDetection(video);
+            }, videoInterval);
+          }
+        });
+      }
+
+      console.log("test");
+      // Load the model.
+      handTrack.load(modelParams).then(lmodel => {
+        // detect objects in the image.
+        model = lmodel;
+        updateNote.innerText = "Loaded Model!";
+        trackButton.disabled = false;
+
+        $(".overlaycenter").animate(
+          {
+            opacity: 0,
+            fontSize: "0vw"
+          },
+          pauseGameAnimationDuration,
+          function() {
+            $(".pauseoverlay").hide();
+          }
+        );
+      });
+
+      let windowXRange,
+        worldXRange = 0;
+      let paddle;
+      let Vec2;
+      let accelFactor;
+
+      // TestBed Details
+      var windowHeight = $(document).height();
+      var windowWidth = document.body.clientWidth;
+
+      console.log(windowHeight, windowWidth);
+
+      var scale_factor = 10;
+      var SPACE_WIDTH = windowWidth / scale_factor;
+      var SPACE_HEIGHT = windowHeight / scale_factor;
+
+      // Bead Details
+      var NUM_BEADS = 6;
+      var BEAD_RESTITUTION = 0.7;
+
+      // Paddle Details
+      accelFactor = 0.042 * SPACE_WIDTH;
+
+      var paddleMap = new Map();
+      var maxNumberPaddles = 10;
+      windowHeight = window.innerHeight;
+      windowWidth = window.innerWidth;
+
+      var bounceClip = new Audio("http://victordibia.com/skyfall/bounce.wav");
+      bounceClip.type = "audio/wav";
+      var enableAudio = false;
+      var pauseGame = false;
+      var pauseGameAnimationDuration = 500;
+
+      $("input#sound").click(function() {
+        enableAudio = $(this).is(":checked");
+        soundtext = enableAudio ? "sound on" : "sound off";
+        $(".soundofftext").text(soundtext);
+      });
     }
   },
   mounted() {
@@ -178,5 +348,15 @@ a:hover {
 .year.active {
   font-size: 23px;
   color: #fff;
+}
+
+#canvas {
+  position: fixed;
+  right: 0;
+  top: 30%;
+  width: 25%;
+  /* border-left: 1px solid #9c9c9c;
+      border-bottom: 1px solid #9c9c9c;
+      box-sizing: border-box; */
 }
 </style>
