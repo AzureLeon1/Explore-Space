@@ -357,11 +357,22 @@ DAT.Globe = function(container, opts) {
     render();
   }
 
+  // 响应数据可视化页面中手部运动追踪
+  moveHandHandler =  function(delta_x, delta_y) {
+    console.log(delta_x);
+    console.log(delta_y);
+    target.x = rotation.x-delta_x * 0.5
+    target.y = rotation.y+delta_y * 0.1
+  }
+
   function render() {
     zoom(curZoomSpeed);
 
+    // mesh.rotation.y -= 0.5;
+
     rotation.x += (target.x - rotation.x) * 0.1;
     rotation.y += (target.y - rotation.y) * 0.1;
+    // rotation.x += 0.1;
     distance += (distanceTarget - distance) * 0.3;
 
     camera.position.x = distance * Math.sin(rotation.x) * Math.cos(rotation.y);
@@ -409,6 +420,7 @@ DAT.Globe = function(container, opts) {
   this.createPoints = createPoints;
   this.renderer = renderer;
   this.scene = scene;
+  this.moveHandHandler = moveHandHandler;
 
   return this;
 

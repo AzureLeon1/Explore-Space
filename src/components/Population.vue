@@ -201,6 +201,9 @@ export default {
               Math.sqrt(Math.pow(temp_delta_x, 2) + Math.pow(temp_delta_y, 2));
             last_x = hand_x;
             last_y = hand_y;
+            console.log("delta_x: " + delta_x.toString());
+            console.log("delta_y: " + delta_y.toString());
+            globe.moveHandHandler(delta_x, delta_y)
           }
           if (isVideo) {
             setTimeout(() => {
