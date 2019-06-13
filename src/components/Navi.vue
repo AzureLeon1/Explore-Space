@@ -20,6 +20,7 @@
         <a-menu-item key="1">Earth</a-menu-item>
         <a-menu-item key="2">Earth-Moon System</a-menu-item>
         <a-menu-item key="3">Planet with Rings</a-menu-item>
+        <a-menu-item key="10">Solar</a-menu-item>
       </a-sub-menu>
       <a-sub-menu key="sub2">
         <span slot="title">
@@ -109,6 +110,10 @@ export default {
             name: "ImportExport"
           });
           break;
+        case '10':
+          this.$router.push({
+            name: "Solar"
+          })
       }
     }
   }

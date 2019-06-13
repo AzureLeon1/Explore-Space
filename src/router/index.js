@@ -7,6 +7,7 @@ import PlanetWithRing from '@/components/PlanetWithRing'
 import University from '@/components/University'
 import ImportExport from '@/components/ImportExport'
 import Earth from '@/components/Earth'
+import Solar from '@/components/Solar'
 
 Vue.use(Router)
 
@@ -42,6 +43,11 @@ export default new Router({
       path: '/importExport',
       name: 'ImportExport',
       component: ImportExport
+    },
+    {
+      path: '/solar',
+      name: 'Solar',
+      component: Solar
     }
   ]
 })
