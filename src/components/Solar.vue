@@ -27,6 +27,30 @@ export default {
       shui_deg = jin_deg = di_deg = huo_deg = mu_deg = tu_deg = tian_deg = hai_deg = 0;
       var PI2 = 2 * Math.PI; // 弧度的最大值
 
+      var name_zh = {
+        'Sun': "太阳",
+        'Mercury': "水星",
+        'Venus': "金星",
+        'Earth': "地球",
+        'Mars': "火星",
+        'Jupiter': "木星",
+        'Saturn': "土星",
+        'Uranus': "天王星",
+        'Neptune': "海王星",
+      }
+      var introduction = {
+        'Sun': "  太阳是太阳系的中心天体，占有太阳系总体质量的99.86%。 太阳系中的八大行星、小行星、流星、彗星、外海王星天体以及星际尘埃等，都围绕着太阳公转，而太阳则围绕着银河系的中心公转。 太阳是位于太阳系中心的恒星，它几乎是热等离子体与磁场交织着的一个理想球体。",
+        'Mercury': "  水星是太阳系八大行星最内侧也是最小的一颗行星，也是离太阳最近的行星。中国称为辰星，有着八大行星中第二大（包括冥王星）的轨道偏心率。它每87.968个地球日绕行太阳一周，而每公转2.01周同时也自转3圈。",
+        'Venus': "  金星是太阳系中八大行星之一，按离太阳由近及远的次序，是第二颗，距离太阳0.725天文单位。 它是离地球最近的行星（火星有时候会更近）。 古罗马人称作维纳斯，中国古代称之为长庚、启明、太白或太白金星，古希腊神话中称为阿佛洛狄特。",
+        'Earth': "  地球是太阳系八大行星之一，按离太阳由近及远的次序排为第三颗，也是太阳系中直径、质量和密度最大的类地行星，距离太阳1.5亿公里。地球自西向东自转，同时围绕太阳公转。现有40~46亿岁，它有一个天然卫星——月球，二者组成一个天体系统——地月系统。46亿年以前起源于原始太阳星云。",
+        'Mars': "  火星是太阳系八大行星之一，是太阳系由内往外数的第四颗行星，属于类地行星，直径约为地球的53%，质量为地球的14%。自转轴倾角、自转周期均与地球相近，公转一周约为地球公转时间的两倍。橘红色外表是地表的赤铁矿（氧化铁）。我国古书上将火星称为“荧惑星”，西方古代（古罗马）称为“神话玛尔斯星”是十二星座白羊座的独一守护星，并非天蝎座的守护行星。",
+        'Jupiter': "  木星是太阳系八大行星中体积最大、自转最快的行星，从内向外的第五颗行星。它的质量为太阳的千分之一，是太阳系中其它七大行星质量总和的2.5倍。由于木星与土星、天王星、海王星皆属气体行星，因此四者又合称类木行星（木星和土星合称气态巨行星）。木星是一个气态巨行星，占所有太阳系行星质量的70%，主要由氢组成，占其总质量的75%，其次为氦，占总质量的25%，岩核则含有其他较重的元素。人类所看到的通常是大气中云层的顶端，压强比1个大气压略高。",
+        'Saturn': "  土星是太阳系八大行星之一，距日距离（由近到远）第6位。质量、直径仅次于木星，并与木星同属气态巨行星。欧洲古代（古希腊）称土星为大地之母盖娅，希腊语：Γαία、英语：Gaia (Gaea)，在古代中国也叫镇星或福星。",
+        'Uranus': "  天王星为太阳系八大行星之一，是太阳系由内向外的第七颗行星（18.37~20.08天文单位），其体积在太阳系中排名第三（比海王星大），质量排名第四（小于海王星），几乎横躺着围绕太阳公转。",
+        'Neptune': "  海王星是太阳系八大行星中的远日行星。按照行星与太阳的距离排列，海王星是第八颗行星，直径上是第四大行星，质量上是第三大行星。海王星的亮度仅为7.85等，只有在天文望远镜里才能看到它。由于它那荧荧的淡蓝色光，所以西方人用罗马神话中的海神——尼普顿（Neptune）”的名字来称呼它。在中文里，把它译为海王星。",
+
+      }
+
       //鼠标事件相关
       var mouse = new THREE3.Vector2(), //屏幕鼠标向量
         INTERSECTED;
@@ -45,7 +69,7 @@ export default {
         mouse.x = (event.clientX / $("canvas").width()) * 2 - 1;
         mouse.y = -(event.clientY / $("canvas").height()) * 2 + 1;
 
-        console.log(event.clientX, $("canvas").width());
+        // console.log(event.clientX, $("canvas").width());
         //射线
         raycaster.setFromCamera(mouse, camera);
         var intersects = raycaster.intersectObjects(scene.children);
@@ -166,6 +190,23 @@ export default {
                 }
               }
 
+              console.log(selection.name);
+
+              var c_name = ""
+              if (name_zh.hasOwnProperty(selection.name)) {
+                c_name = name_zh[selection.name]
+              }
+              else {
+                content = "暂无数据"
+              }
+              var content = ""
+              if (introduction.hasOwnProperty(selection.name)) {
+                content = introduction[selection.name]
+              }
+              else {
+                content = "暂无数据"
+              }
+
               //                    $("canvas").width(window.innerWidth*0.2+'px')
               var html = "";
               html +=
@@ -179,7 +220,7 @@ export default {
                 '<div style="width: 90%;height: 90%;margin: 0 auto;background: rgba(255,255,255,0.5);border-radius: 5px;position: relative;top:' +
                 MH +
                 '">' +
-                '<div style="width: 100%;height: 30px;text-align: right"><div class="btn-close" style="display: inline-block;font-size: 16px;color: #cccccc;width: 30px;text-align: center">x</div><div style="text-align:left; margin-left: 20px; margin-top: 30px; font-size: 24px;"> test</div></div>' +
+                '<div style="width: 100%;height: 30px;text-align: right"><div class="btn-close" style="display: inline-block;font-size: 16px;color: #cccccc;width: 30px;text-align: center">x</div><div style="text-align:center; margin-top: 30px; font-size: 26px; color: #74b9ff;">'+ c_name +'</div><div style="text-align: left; margin: 30px;font-size: 16px;">'+content+'</div></div>' +
                 "</div>" +
                 "</div>";
               $("body").append(html);
