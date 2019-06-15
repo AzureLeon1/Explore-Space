@@ -56,17 +56,20 @@ export default {
       collapsed: true
     };
   },
+  watch: {
+    '$route'() {
+      console.log(this.$route.name);
+    }
+  },
   methods: {
     toggleCollapsed() {
       this.collapsed = !this.collapsed;
     },
     handleClick(e) {
-      // console.log(e);
-      console.log(e.key);
       switch (e.key) {
         case "1":
           this.$router.push({
-            name: "cesiumContainer"
+            name: "Earth"
           });
           break;
         case "2":

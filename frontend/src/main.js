@@ -5,10 +5,17 @@ import App from './App'
 import router from './router'
 import Antd from 'ant-design-vue'
 import 'ant-design-vue/dist/antd.css'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import http from 'axios'
 
 Vue.config.productionTip = false
 
+Vue.prototype.$axios = http
+
 Vue.use(Antd)
+Vue.use(ElementUI)
+
 
 /* eslint-disable no-new */
 new Vue({

@@ -30,6 +30,8 @@ func (h *Handler) Signup(c echo.Context) (err error) {
         return
     }
 
+    c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+    
     return c.JSON(http.StatusCreated, u)
 }
 
@@ -70,6 +72,7 @@ func (h *Handler) Login(c echo.Context) (err error) {
     }
 
     u.Password = "" // Don't send password
+    c.Response().Header().Set("Access-Control-Allow-Origin", "*")
     return c.JSON(http.StatusOK, u)
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div style="position: fixed; z-index: 10; top: 120px;">
+    <div v-if="$route.name !== 'Login'" style="position: fixed; z-index: 10; top: 120px;">
       <navi />
     </div>
     <div>

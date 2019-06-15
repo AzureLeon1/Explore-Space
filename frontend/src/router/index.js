@@ -8,6 +8,7 @@ import University from '@/components/University'
 import ImportExport from '@/components/ImportExport'
 import Earth from '@/components/Earth'
 import Solar from '@/components/Solar'
+import Login from '@/views/Login'
 
 Vue.use(Router)
 
@@ -15,7 +16,12 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'cesiumContainer',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/earth',
+      name: 'Earth',
       // component: cesiumContainer
       component: Earth
     },

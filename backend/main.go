@@ -24,6 +24,11 @@ func main() {
         },
     }))
 
+    e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+        AllowOrigins: []string{"*"},
+        AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
+    }))
+
     // Database connection
     db, err := mgo.Dial("127.0.0.1")
     if err != nil {
@@ -47,6 +52,7 @@ func main() {
     e.POST("/follow/:id", h.Follow)
     e.POST("/posts", h.CreatePost)
     e.GET("/feed", h.FetchPost)
+    // TODO: post data
 
     // Start server
     e.Logger.Fatal(e.Start(":1323"))
