@@ -358,6 +358,7 @@ a:hover {
   right: 0;
   top: 30%;
   width: 25%;
+  height: 35%;
   /* border-left: 1px solid #9c9c9c;
       border-bottom: 1px solid #9c9c9c;
       box-sizing: border-box; */

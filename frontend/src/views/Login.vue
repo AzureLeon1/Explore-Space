@@ -6,7 +6,7 @@
         <div class="login-wrap-top">
           <el-row>
             <img
-              src="../assets/login_logo.png"
+              src="../assets/logo.png"
               style="width:200px;"
               alt="Login Logo"
             />
