@@ -35,7 +35,11 @@
     </div>
 
     <div id="upload">
-      <input type="file" id="fileSelected">
+      <a href="javascript:;" class="file">
+        选择文件
+        <input type="file"  id="fileSelected">
+      </a>
+      <!-- <input type="file" id="fileSelected"> -->
       <el-button type="primary" icon="el-icon-upload" id="upButton" circle></el-button>
       <!-- <el-upload action="http://localhost:1323/data" :auto-upload="false" :http-request="uploadCSV">
         <el-button type="primary" icon="el-icon-upload" circle></el-button>
@@ -54,27 +58,7 @@ export default {
     };
   },
   methods: {
-    importJS() {
-      const oScript = document.createElement("script");
-      oScript.type = "text/javascript";
-      oScript.src = "./static/js/third-party/three.min.js";
-    },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-    },
-    handleExceed(files, fileList) {
-      this.$message.warning(
-        `当前限制选择 3 个文件，本次选择了 ${
-          files.length
-        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
-      );
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`);
-    },
+    // 弃用的函数
     uploadCSV(req) {
       console.log("test");
       console.log(req);
@@ -158,12 +142,11 @@ export default {
             .then(res => {
               console.log(res);
               console.log(globe);
-              globe.dltPoints("ok")
+              globe.dltPoints();
               globe = new DAT.Globe(container, opts);
               globe.addData(res.data, { format: "magnitude" });
               globe.createPoints();
               globe.animate();
-
             })
             .catch(err => {
               console.log(err.message);
@@ -204,7 +187,7 @@ export default {
         xhr.send(null);
       }
 
-      // TODO: 手部跟踪
+      // 手部跟踪
       const video = document.getElementById("myvideo");
       const canvas = document.getElementById("canvas");
       const context = canvas.getContext("2d");
@@ -243,9 +226,10 @@ export default {
         });
       }
 
-      test = function() {
-        console.log("test");
-      };
+      trackButton.addEventListener("click", function() {
+        console.log("track click");
+        toggleVideo();
+      });
 
       function toggleVideo() {
         if (!isVideo) {
@@ -258,11 +242,6 @@ export default {
           updateNote.innerText = "Video stopped";
         }
       }
-
-      trackButton.addEventListener("click", function() {
-        console.log("track click");
-        toggleVideo();
-      });
 
       function runDetection() {
         model.detect(video).then(predictions => {
@@ -427,15 +406,15 @@ a:hover {
 #trackVideo {
   position: fixed;
   z-index: 5;
-  top: 0;
-  left: 47%;
+  top: 185px;
+  right: 20px
 }
 
 #upload {
   position: fixed;
   z-index: 5;
-  top: 0;
-  left: 60%;
+  top: 120px;
+  right: 20px;
 }
 
 .year {
@@ -462,9 +441,38 @@ a:hover {
   right: 0;
   top: 30%;
   width: 25%;
-  height: 35%;
+  height: 30%;
   /* border-left: 1px solid #9c9c9c;
       border-bottom: 1px solid #9c9c9c;
       box-sizing: border-box; */
+}
+
+.file {
+  position: fixed;
+  display: inline-block;
+  background: #d0eeff;
+  border: 1px solid #99d3f5;
+  border-radius: 4px;
+  padding: 4px 12px;
+  overflow: hidden;
+  color: #1e88c7;
+  text-decoration: none;
+  text-indent: 0;
+  line-height: 20px;
+  right: 75px;
+  top: 125px;
+}
+.file input {
+  position: absolute;
+  font-size: 100px;
+  right: 0;
+  top: 0;
+  opacity: 0;
+}
+.file:hover {
+  background: #aadffd;
+  border-color: #78c3f3;
+  color: #004974;
+  text-decoration: none;
 }
 </style>

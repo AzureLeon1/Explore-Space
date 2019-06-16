@@ -365,10 +365,7 @@ DAT.Globe = function(container, opts) {
     target.y = rotation.y+delta_y * 0.1
   }
 
-  function dltPoints(str) {
-    console.log(str);
-    console.log(scene);
-    console.log("test remove");
+  function dltPoints() {
     scene.children.forEach(ele => {
       scene.remove(ele)
     });
