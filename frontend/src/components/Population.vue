@@ -35,11 +35,11 @@
     </div>
 
     <div id="upload">
-       <!-- <input type="file" id="fileSelected"/>n>
-      <el-button type="primary" icon="el-icon-upload" @click="upload" circle></el-button> -->
-      <el-upload action="http://localhost:1323/data" :http-request="uploadCSV">
+      <input type="file" id="fileSelected">
+      <el-button type="primary" icon="el-icon-upload" id="upButton" circle></el-button>
+      <!-- <el-upload action="http://localhost:1323/data" :auto-upload="false" :http-request="uploadCSV">
         <el-button type="primary" icon="el-icon-upload" circle></el-button>
-      </el-upload>
+      </el-upload>-->
     </div>
   </div>
 </template>
@@ -49,6 +49,7 @@ export default {
   name: "Population",
   data() {
     return {
+      globe: null,
       fileList: []
     };
   },
@@ -74,10 +75,6 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
-    upload() {
-       var file = $('#fileSelected')[0].files[0];
-       console.log(file);
-    },
     uploadCSV(req) {
       console.log("test");
       console.log(req);
@@ -94,11 +91,7 @@ export default {
         .post("http://localhost:1323/data", formdata, config)
         .then(res => {
           console.log(res);
-          // this.fileList.push({
-          //   name: res.data.name,
-          //   url: res.data.url
-          // });
-          console.log("image upload succeed.");
+          // 基于res.data可视化
         })
         .catch(err => {
           console.log(err.message);
@@ -111,7 +104,6 @@ export default {
       var temp_delta_y = 0;
       var isMove = false;
 
-      console.log(Detector.webgl);
       if (!Detector.webgl) {
         Detector.addGetWebGLMessage();
       } else {
@@ -149,8 +141,41 @@ export default {
           y.addEventListener("click", settime(globe, i), false);
         }
 
+        var upload = () => {
+          var file = $("#fileSelected")[0].files[0];
+          console.log(file);
+          console.log(this);
+          const config = {
+            headers: { "Content-Type": "multipart/form-data" }
+          };
+          const formdata = new FormData();
+          formdata.append("file", file);
+          formdata.append("type", "csv");
+          // formdata.append("key", keyName);
+          console.log(formdata);
+          this.$axios
+            .post("http://localhost:1323/data", formdata, config)
+            .then(res => {
+              console.log(res);
+              console.log(globe);
+              globe = null
+              globe = new DAT.Globe(container, opts);
+              globe.addData(res.data, { format: "magnitude" });
+              globe.createPoints();
+              globe.animate();
+
+            })
+            .catch(err => {
+              console.log(err.message);
+            });
+        };
+        var ub = document.getElementById("upButton");
+        ub.addEventListener("click", upload);
+
         var xhr;
         TWEEN.start();
+
+        console.log(globe);
 
         xhr = new XMLHttpRequest();
         xhr.open("GET", "../../static/population909500.json", true);
@@ -161,6 +186,7 @@ export default {
               var data = JSON.parse(xhr.responseText);
               window.data = data;
               console.log(data.length);
+              console.log(data);
               for (i = 0; i < data.length; i++) {
                 globe.addData(data[i][1], {
                   format: "magnitude",
@@ -215,6 +241,10 @@ export default {
           }
         });
       }
+
+      test = function() {
+        console.log("test");
+      };
 
       function toggleVideo() {
         if (!isVideo) {
@@ -334,7 +364,6 @@ export default {
     }
   },
   mounted() {
-    // this.importJS()
     this.init();
   }
 };
