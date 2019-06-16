@@ -158,7 +158,7 @@ export default {
             .then(res => {
               console.log(res);
               console.log(globe);
-              globe = null
+              globe.dltPoints("ok")
               globe = new DAT.Globe(container, opts);
               globe.addData(res.data, { format: "magnitude" });
               globe.createPoints();
@@ -209,6 +209,7 @@ export default {
       const canvas = document.getElementById("canvas");
       const context = canvas.getContext("2d");
       let trackButton = document.getElementById("trackbutton");
+      console.log(trackButton);
       let updateNote = document.getElementById("updatenote");
 
       let imgindex = 1;
@@ -259,6 +260,7 @@ export default {
       }
 
       trackButton.addEventListener("click", function() {
+        console.log("track click");
         toggleVideo();
       });
 
@@ -433,7 +435,7 @@ a:hover {
   position: fixed;
   z-index: 5;
   top: 0;
-  left: 52%;
+  left: 60%;
 }
 
 .year {

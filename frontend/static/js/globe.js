@@ -365,6 +365,16 @@ DAT.Globe = function(container, opts) {
     target.y = rotation.y+delta_y * 0.1
   }
 
+  function dltPoints(str) {
+    console.log(str);
+    console.log(scene);
+    console.log("test remove");
+    scene.children.forEach(ele => {
+      scene.remove(ele)
+    });
+
+  }
+
   function render() {
     zoom(curZoomSpeed);
 
@@ -421,6 +431,7 @@ DAT.Globe = function(container, opts) {
   this.renderer = renderer;
   this.scene = scene;
   this.moveHandHandler = moveHandHandler;
+  this.dltPoints = dltPoints;
 
   return this;
 
