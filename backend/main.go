@@ -17,7 +17,7 @@ func main() {
         SigningKey: []byte(handler.Key),
         Skipper: func(c echo.Context) bool {
             // Skip authentication for and signup login requests
-            if c.Path() == "/login" || c.Path() == "/signup" {
+            if c.Path() == "/login" || c.Path() == "/signup" || c.Path() == "/data" {
                 return true
             }
             return false
@@ -26,7 +26,8 @@ func main() {
 
     e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
         AllowOrigins: []string{"*"},
-        AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
+        AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE, },
+        // AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
     }))
 
     // Database connection
@@ -52,7 +53,8 @@ func main() {
     e.POST("/follow/:id", h.Follow)
     e.POST("/posts", h.CreatePost)
     e.GET("/feed", h.FetchPost)
-    // TODO: post data
+    // post csv data
+    e.POST("/data", h.HandleData)
 
     // Start server
     e.Logger.Fatal(e.Start(":1323"))

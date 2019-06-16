@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <img src="../assets/login_bg.jpg" alt="Login Background" class="login-bg">
+    <img src="../assets/bg.jpg" alt="Login Background" class="login-bg">
     <div style="background:rgba(0,0,0,0.2);height:100%;width:100%;">
       <div class="top">
         <div class="login-wrap-top">

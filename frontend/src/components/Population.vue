@@ -1,13 +1,18 @@
 <template>
   <div class="home">
     <div id="updatenote" class="updatenote mt10">loading model ..</div>
-    <button
+
+    <div id="trackVideo">
+      <el-button type="primary" icon="el-icon-video-camera" id="trackbutton" circle></el-button>
+    </div>
+
+    <!-- <button
       id="trackbutton"
       class="bx--btn bx--btn--secondary mt10 trackbutton"
       style="position: fixed; z-index: 5; top: 0; left: 45%"
       type="button"
       disabled
-    >Toggle Video Control ..</button>
+    >Toggle Video Control ..</button>-->
     <video class="videobox canvasbox" autoplay="autoplay" id="myvideo" style="display: none"></video>
     <canvas id="canvas" class="border canvasbox"></canvas>
 
@@ -28,6 +33,14 @@
       <span id="year1995" class="year">1995</span>
       <span id="year2000" class="year">2000</span>
     </div>
+
+    <div id="upload">
+      <!-- <el-button type="primary" icon="el-icon-upload" @click="uploadCSV" circle></el-button> -->
+      <el-upload action="http://localhost:1323/data" :http-request="uploadCSV">
+        <!-- <el-button size="small" type="primary">点击上传</el-button> -->
+        <el-button type="primary" icon="el-icon-upload" circle></el-button>
+      </el-upload>
+    </div>
   </div>
 </template>
 
@@ -35,13 +48,63 @@
 export default {
   name: "Population",
   data() {
-    return {};
+    return {
+      fileList: []
+    };
   },
   methods: {
     importJS() {
       const oScript = document.createElement("script");
       oScript.type = "text/javascript";
       oScript.src = "./static/js/third-party/three.min.js";
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(file);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 3 个文件，本次选择了 ${
+          files.length
+        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+      );
+    },
+    beforeRemove(file, fileList) {
+      return this.$confirm(`确定移除 ${file.name}？`);
+    },
+    uploadCSV(req) {
+      console.log("test");
+      console.log(req);
+      const config = {
+        headers: { "Content-Type": "multipart/form-data" }
+
+      };
+      let filetype = "";
+
+        filetype = "csv";
+
+      // const keyName =
+      //   this.bucket + "-" + Types.ObjectId().toString() + "." + fileType;
+      //   console.log(kayName);
+      const formdata = new FormData();
+      formdata.append("file", req.file);
+      // formdata.append("key", keyName);
+      console.log(formdata);
+      this.$axios
+        .post("http://localhost:1323/data", formdata, config)
+        .then(res => {
+          console.log(res);
+          // this.fileList.push({
+          //   name: res.data.name,
+          //   url: res.data.url
+          // });
+          console.log("image upload succeed.");
+        })
+        .catch(err => {
+          console.log(err.message);
+        });
     },
     init() {
       var delta_x = 0;
@@ -117,7 +180,6 @@ export default {
         xhr.send(null);
       }
 
-      console.log("test-113");
       // TODO: 手部跟踪
       const video = document.getElementById("myvideo");
       const canvas = document.getElementById("canvas");
@@ -203,7 +265,7 @@ export default {
             last_y = hand_y;
             console.log("delta_x: " + delta_x.toString());
             console.log("delta_y: " + delta_y.toString());
-            globe.moveHandHandler(delta_x, delta_y)
+            globe.moveHandHandler(delta_x, delta_y);
           }
           if (isVideo) {
             setTimeout(() => {
@@ -213,7 +275,6 @@ export default {
         });
       }
 
-      console.log("test");
       // Load the model.
       handTrack.load(modelParams).then(lmodel => {
         // detect objects in the image.
@@ -276,7 +337,7 @@ export default {
   },
   mounted() {
     // this.importJS()
-    this.init()
+    this.init();
   }
 };
 </script>
@@ -332,6 +393,20 @@ a:hover {
   font: 20px Georgia;
   padding: 10px;
   color: #fff;
+}
+
+#trackVideo {
+  position: fixed;
+  z-index: 5;
+  top: 0;
+  left: 47%;
+}
+
+#upload {
+  position: fixed;
+  z-index: 5;
+  top: 0;
+  left: 52%;
 }
 
 .year {
