@@ -35,9 +35,9 @@
     </div>
 
     <div id="upload">
-      <!-- <el-button type="primary" icon="el-icon-upload" @click="uploadCSV" circle></el-button> -->
+       <!-- <input type="file" id="fileSelected"/>n>
+      <el-button type="primary" icon="el-icon-upload" @click="upload" circle></el-button> -->
       <el-upload action="http://localhost:1323/data" :http-request="uploadCSV">
-        <!-- <el-button size="small" type="primary">点击上传</el-button> -->
         <el-button type="primary" icon="el-icon-upload" circle></el-button>
       </el-upload>
     </div>
@@ -74,22 +74,20 @@ export default {
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
     },
+    upload() {
+       var file = $('#fileSelected')[0].files[0];
+       console.log(file);
+    },
     uploadCSV(req) {
       console.log("test");
       console.log(req);
+      console.log(req.file);
       const config = {
         headers: { "Content-Type": "multipart/form-data" }
-
       };
-      let filetype = "";
-
-        filetype = "csv";
-
-      // const keyName =
-      //   this.bucket + "-" + Types.ObjectId().toString() + "." + fileType;
-      //   console.log(kayName);
       const formdata = new FormData();
       formdata.append("file", req.file);
+      formdata.append("type", "csv");
       // formdata.append("key", keyName);
       console.log(formdata);
       this.$axios
